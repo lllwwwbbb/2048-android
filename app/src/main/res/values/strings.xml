@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">2048</string>
+    <string name="text_score"> SCORE </string>
+    <string name="text_best"> BEST  </string>
+</resources>
