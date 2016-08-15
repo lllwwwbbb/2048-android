@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +29,15 @@ public class MainActivity extends AppCompatActivity {
         tvBest.setText(best + "");
 
         mainActivity = this;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            moveTaskToBack(false);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     public void clearScore() {
