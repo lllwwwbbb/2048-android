@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
 
     public final String SP_FILE = "game2048";
     public final String BEST_KEY = "best";
+    public final String SCORE_KEY = "score";
+    public final String SQUARE_KEY = "square";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,19 @@ public class MainActivity extends AppCompatActivity {
         tvBest.setText(best + "");
 
         mainActivity = this;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        clearScore();
+        addScore(savedInstanceState.getInt(SCORE_KEY));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SCORE_KEY, score);
     }
 
     @Override

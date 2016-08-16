@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">2048</string>
-    <string name="text_score"> SCORE </string>
-    <string name="text_best"> BEST  </string>
+    <string name="text_score">SCORE</string>
+    <string name="text_best">BEST</string>
+    <string name="button_restart">重新开始</string>
+    <string name="text_gameover">游戏结束</string>
+    <string name="button_cancel">取消</string>
 </resources>

@@ -7,6 +7,9 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.inputmethodservice.Keyboard;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,12 +26,14 @@ public class GameView extends GridLayout {
     private boolean isStart;
     private boolean isMoved;
     private List<Point> emptyPoints = new ArrayList<>();
-    private List<Card>cardList = new ArrayList<>();
+    private List<Card> cardList = new ArrayList<>();
 
     private final int ROW = 4;
     private final int COL = 4;
     private final int MARGIN = 10;
     private final int BGCOLOR = 0xFFBBADA0;
+    private final String CARD_KEY = "card";
+    private final String START_KEY = "start";
 
     public GameView(Context context) {
         super(context);
@@ -88,6 +93,38 @@ public class GameView extends GridLayout {
                 return true;
             }
         });
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(this.toString(), super.onSaveInstanceState());
+        bundle.putBoolean(START_KEY, isStart);
+        for (int r = 0; r < ROW; r++) {
+            for (int c = 0; c < COL; c++) {
+                bundle.putInt(r * COL + c + CARD_KEY, cardMap[r][c].getNumber());
+            }
+        }
+        return bundle;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (state instanceof Bundle) {
+            Bundle bundle = (Bundle) state;
+            isStart = bundle.getBoolean(START_KEY);
+            for (int r = 0; r < ROW; r++) {
+                for (int c = 0; c < COL; c++) {
+                    if (cardMap[r][c] == null) {
+                        cardMap[r][c] = new Card(getContext());
+                    }
+                    cardMap[r][c].setNumber(bundle.getInt(r * COL + c + CARD_KEY, 0));
+                }
+            }
+            super.onRestoreInstanceState(bundle.getParcelable(this.toString()));
+            return;
+        }
+        super.onRestoreInstanceState(state);
     }
 
     @Override
@@ -299,11 +336,18 @@ public class GameView extends GridLayout {
     }
 
     private void gameOver() {
-        new AlertDialog.Builder(getContext()).setTitle("Game2048").setMessage("GameOver").setPositiveButton("Restart",
+        new AlertDialog.Builder(getContext()).setTitle(R.string.app_name).setMessage(R.string.text_gameover)
+                .setPositiveButton(R.string.button_restart,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         startGame();
+                    }
+                }).setNegativeButton(R.string.button_cancel,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
                     }
                 }).show();
     }
