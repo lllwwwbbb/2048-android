@@ -4,12 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private TextView tvScore;
     private TextView tvBest;
+    private Toolbar toolbar;
     private int score;
     private int best;
     private static MainActivity mainActivity = null;
@@ -24,6 +29,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setTitle(R.string.app_version);
+        toolbar.setSubtitle(R.string.app_version_number);
+        toolbar.setLogo(R.mipmap.ic_launcher);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.action_restart :
+                        GameView.getGameView().onRestart();
+                        break;
+                    default:
+                }
+                return true;
+            }
+        });
+
         tvScore = (TextView) findViewById(R.id.tvScore);
         tvBest = (TextView) findViewById(R.id.tvBest);
         SharedPreferences sp = getSharedPreferences(SP_FILE, Context.MODE_PRIVATE);
@@ -31,6 +55,12 @@ public class MainActivity extends AppCompatActivity {
         tvBest.setText(best + "");
 
         mainActivity = this;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     @Override

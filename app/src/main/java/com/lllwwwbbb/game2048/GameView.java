@@ -27,6 +27,7 @@ public class GameView extends GridLayout {
     private boolean isMoved;
     private List<Point> emptyPoints = new ArrayList<>();
     private List<Card> cardList = new ArrayList<>();
+    private static GameView gameView = null;
 
     private final int ROW = 4;
     private final int COL = 4;
@@ -52,6 +53,7 @@ public class GameView extends GridLayout {
 
     private void initGameView() {
         this.isStart = true;
+        gameView = this;
         setColumnCount(this.COL);
         setBackgroundColor(this.BGCOLOR);
 
@@ -138,6 +140,10 @@ public class GameView extends GridLayout {
             startGame();
             this.isStart = false;
         }
+    }
+
+    public void onRestart() {
+        startGame();
     }
 
     private void addCards(int cardSize) {
@@ -363,5 +369,9 @@ public class GameView extends GridLayout {
             MainActivity.getMainActivity().setBest(score);
             editor.commit();
         }
+    }
+
+    public static GameView getGameView() {
+        return gameView;
     }
 }
